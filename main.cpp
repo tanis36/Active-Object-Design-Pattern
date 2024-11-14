@@ -69,8 +69,8 @@ class Servant {
 public:
     // Processing function that adds 5 to the input after a delay
     int process(int data) {
-        // Simulate delay
-        this_thread::sleep_for(chrono::seconds(1));
+        // Simulate delay of 5 seconds
+        this_thread::sleep_for(chrono::seconds(5));
         // Return the result of the process
         return data + 5;
     }
@@ -117,6 +117,16 @@ private:
     Servant servant;
 };
 
+// Main
 int main() {
+    // Create an ActiveObject
+    ActiveObject activeObject;
 
+    // Submit a request
+    future<int> result = activeObject.asyncProcess(12);
+
+    cout << "Request sent, performing other work..." << endl;
+
+    // Get the result and print it to the console when it is ready
+    cout << "Result: " << result.get() << endl;
 }
