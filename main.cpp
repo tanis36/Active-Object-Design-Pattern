@@ -17,8 +17,10 @@ public:
     // Enqueues a new MethodRequest
     void enqueue(MethodRequest request) {
         lock_guard<mutex> lock(mtx);
-        requests.push(request);  // Add request to the queue
-        cv.notify_one();  // Notify worker thread that a request is available
+        // Add request to the queue
+        requests.push(request);
+        // Notify worker thread that a request is available
+        cv.notify_one();
     }
 
     // Starts the scheduler and processes requests in a separate thread
