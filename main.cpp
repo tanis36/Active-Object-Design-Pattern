@@ -76,6 +76,47 @@ public:
     }
 };
 
+// Class ActiveObject is a proxy that provides an asynchronous interface to the Servant
+class ActiveObject {
+public:
+    // Constructor
+    ActiveObject() {
+        // Start the scheduler once initialized
+        scheduler.start();
+    }
+
+    // Destructor
+    ~ActiveObject() {
+        // Stop the scheduler upon destruction
+        scheduler.stop();
+    }
+
+    // Asynchronous interface for clients to process data
+    future<int> asyncProcess(int data) {
+        // Shared promise
+        auto promise = make_shared<std::promise<int>>();
+        // Get future
+        auto future = promise->get_future();
+
+        // Enqueue a MethodRequest that will run in the background
+        scheduler.enqueue([this, data, promise]() {
+            // Perform the work
+            int result = servant.process(data);
+            // Set the result in the promise
+            promise->set_value(result);
+        });
+
+        // Return the future
+        return future;
+    }
+
+private:
+    // Scheduler to manage requests
+    Scheduler scheduler;
+    // Servant to perform work
+    Servant servant;
+};
+
 int main() {
 
 }
