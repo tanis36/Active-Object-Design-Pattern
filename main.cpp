@@ -64,6 +64,18 @@ private:
     thread worker;
 };
 
+// Class Servant performs the work that clients request through the Active Object
+class Servant {
+public:
+    // Processing function that adds 5 to the input after a delay
+    int process(int data) {
+        // Simulate delay
+        this_thread::sleep_for(chrono::seconds(1));
+        // Return the result of the process
+        return data + 5;
+    }
+};
+
 int main() {
 
 }
